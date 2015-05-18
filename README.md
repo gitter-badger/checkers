@@ -2,7 +2,7 @@
 
 Modern java implementation of a checkers game.
 
-# License
+### License
 
 Copyright 2015 Anders Borg
 
