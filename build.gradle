@@ -14,13 +14,30 @@
  * limitations under the License.
  */
 
-apply plugin: 'java'
 apply plugin: 'application'
+apply plugin: 'gradle-one-jar'
+
+/* code for the gradle-one-jar, may be removable in the future */
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.github.rholder:gradle-one-jar:1.0.4'
+    }
+}
+
+task runnableJar( type: OneJar ) {
+  mainClass = 'com.aboru.checkers.ApplicationDriver'
+} // end one-jar code
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version '0.1.0-SNAPSHOT'
+group   = 'com.aboru'
+version = '0.1.0-SNAPSHOT'
+
+mainClassName = 'com.aboru.checkers.ApplicationDriver'
 
 repositories {
   mavenCentral()
@@ -34,4 +51,28 @@ dependencies {
 
 task wrapper( type: Wrapper ) {
   gradleVersion = '2.4'
+}
+
+task sourceJar( type: Jar ) {
+  classifier = 'sources'
+  from sourceSets.main.allSource
+}
+
+task javadocJar( type: Jar ) {
+  classifier = 'javadoc'
+  from javadoc.destinationDir
+}
+
+jar {
+  manifest {
+    attributes "Implementation-Title": "Gradle Quickstart"
+    attributes "Implementation-Version": version
+    attributes "Main-Class" : mainClassName
+  }
+}
+
+artifacts {
+  archives runnableJar
+  archives sourceJar
+  archives javadocJar
 }
